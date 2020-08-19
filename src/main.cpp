@@ -133,11 +133,11 @@ void opcontrol() {
 void opcontrol(){
 	printf("In opcontrol\n");
 	//printheading();
-	translate2(28, 80, true);
+	translate2(28, 80, false);
 	rotate(-225, 60);
 	translate2(24, 80, true);
 	pros::delay(1000);
-	translate2(-24, 80, true);
+	translate2(-24, 80, false);
 	rotate(-90, 60);
 	translate2(34, 80, true);
 	rotate(180, 60);

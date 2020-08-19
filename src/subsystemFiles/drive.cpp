@@ -132,7 +132,7 @@ void translate2(int units, int voltage, bool correction){
 
     double botAngle = InertialA.get_heading();
     while((botAngle<initHeading-1) || (botAngle>initHeading+1)){
-      setDrive(20*direction, -20*direction);
+      setDrive(30*direction, -30*direction);
       botAngle = InertialA.get_heading();
       pros::delay(10);
     }
@@ -178,7 +178,7 @@ void rotate(int degrees, int voltage){
   }
   pros::delay(100);
   //check if it overshot
-
+/*  botAngle = InertialA.get_heading();
   if(fabs(botAngle) > abs(degrees)){
     setDrive(-0.5*voltage*direction, 0.5 * voltage * direction);
     while(fabs(botAngle) > abs(degrees)){
@@ -186,14 +186,31 @@ void rotate(int degrees, int voltage){
       botAngle = InertialA.get_heading();
       printf("while2 %f\n", botAngle);
     }
-  }/*else if(fabs(botAngle) < abs(degrees )){
+  }else if(fabs(botAngle) < abs(degrees )){
     setDrive(0.5*-voltage*direction, 0.5 * voltage * direction);
     while(fabs(gyro.get_value()) > abs(degrees * 10)){
        pros::delay(10);
     }
   }*/
-  //brief set_brake_mode
-  setDrive(-10*direction, 10*direction);
+  double newHeading = InertialA.get_heading();
+  int init_quad = get_quad(abs(degrees));
+  int final_quad = get_quad(newHeading);
+
+  if(init_quad==1 && final_quad==4){
+    direction = 1; //clockwise
+  }else if(init_quad==4 && final_quad==1){
+    direction = -1; //counter
+  }else{
+    direction = (abs(degrees) - newHeading)/fabs(abs(degrees) - newHeading);
+  }
+
+  double correctAngle = InertialA.get_heading();
+  while((correctAngle<abs(degrees)-1) || (correctAngle>abs(degrees)+1)){
+     setDrive(30*direction, -30*direction);
+     pros::delay(10);
+     correctAngle = InertialA.get_heading();
+   }
+
   //reset drive to zero
   setDrive(0,0);
 }
