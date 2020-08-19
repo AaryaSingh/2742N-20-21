@@ -133,9 +133,14 @@ void opcontrol() {
 void opcontrol(){
 	printf("In opcontrol\n");
 	//printheading();
-	translate2(30, 64, true);
-	//rotate(90, 60);
-
+	translate2(28, 80, true);
+	rotate(-225, 60);
+	translate2(24, 80, true);
+	pros::delay(1000);
+	translate2(-24, 80, true);
+	rotate(-90, 60);
+	translate2(34, 80, true);
+	rotate(180, 60);
 
 	while(true){
 		//some code to control thr drive

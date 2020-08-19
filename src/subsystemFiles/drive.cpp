@@ -103,7 +103,7 @@ void translate2(int units, int voltage, bool correction){
   //drive forward until units are reached
   float tickDistInch = avgQuadEncoderValue()*(9.3/360);
   printf("set tickdistinch\n");
-  while(tickDistInch < abs(units)){
+  while(fabs(tickDistInch) < abs(units)){
     printf("avg val %f\n", tickDistInch);
     setDrive(voltage*direction, voltage*direction);
     pros::delay(10);
