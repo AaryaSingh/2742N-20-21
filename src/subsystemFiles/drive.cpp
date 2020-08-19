@@ -60,6 +60,19 @@ void constantDrive(){
 }
 
 //AUTONOMOUS FUNCTIONS
+int get_quad(double angle){
+  int ret = 1;
+  if((angle>270) && (angle <=360)){
+    ret = 4;
+  }else if((angle>180) && (angle <=270)){
+    ret = 3;
+  }else if((angle>90) && (angle <=180)){
+    ret = 2;
+  }
+  printf("In get_quad %d\n",ret);
+  return ret;
+}
+
 void translate(int units, int voltage){
   printf("In translate %d %d\n",units, voltage);
   int direction = abs(units)/units;
@@ -80,7 +93,8 @@ void translate(int units, int voltage){
   setDrive(0,0);
 }
 
-void translate2(int units, int voltage){
+void translate2(int units, int voltage, bool correction){
+  double initHeading = InertialA.get_heading();
   printf("In translate2 %d %d\n",units, voltage);
   int direction = abs(units)/units;
   //reset encoders
@@ -95,12 +109,35 @@ void translate2(int units, int voltage){
     pros::delay(10);
     tickDistInch = avgQuadEncoderValue()*(9.3/360);
   }
-    printf("exit while\n");
+  printf("exit while\n");
   //brief set_brake_mode
   setDrive(-10 * direction, -10 * direction);
   pros::delay(50);
   //set drive back to neutral
   setDrive(0,0);
+
+  if(correction){
+    double newHeading = InertialA.get_heading();
+    int init_quad = get_quad(initHeading);
+    int final_quad = get_quad(newHeading);
+
+    if(init_quad==1 && final_quad==4){
+      direction = 1; //clockwise;
+    }else if(init_quad==4 && final_quad==1){
+      direction = -1; //counter;
+    }else{
+      direction = (initHeading - newHeading)/fabs(initHeading - newHeading);
+    }
+    printf("Correction direction %d\n",direction);
+
+    double botAngle = InertialA.get_heading();
+    while((botAngle<initHeading-1) || (botAngle>initHeading+1)){
+      setDrive(20*direction, -20*direction);
+      botAngle = InertialA.get_heading();
+      pros::delay(10);
+    }
+    setDrive(0,0);
+  }
 }
 
 void initializeIMU(){

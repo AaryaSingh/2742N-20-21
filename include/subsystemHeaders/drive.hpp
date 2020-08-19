@@ -15,5 +15,5 @@ void constantDrive();
 
 //AUTONOMOUS FUNCTIONS
 void translate(int units, int voltage);
-void translate2(int units, int voltage);
+void translate2(int units, int voltage, bool correction);
 void rotate(int degrees, int voltage);

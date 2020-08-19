@@ -133,7 +133,7 @@ void opcontrol() {
 void opcontrol(){
 	printf("In opcontrol\n");
 	//printheading();
-	translate2(24, 64);
+	translate2(30, 64, true);
 	//rotate(90, 60);
 
 
