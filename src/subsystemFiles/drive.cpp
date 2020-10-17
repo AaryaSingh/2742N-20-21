@@ -1,22 +1,22 @@
 #include  "main.h"
 
-pros::Imu InertialA(11);
+pros::Imu InertialA(4);
 pros::ADIEncoder encRight('E', 'F', false);
 pros::ADIEncoder encLeft('G', 'H', false);
 
 //HELPER FUNCTIONS
 void setDrive(int left, int right){
   driveLeftBack = left;
-  //driveLeftFront = left;
+  driveLeftFront = left;
   driveRightBack = right;
-  //driveRightFront = right;
+  driveRightFront = right;
 }
 
 void resetDriveEncoders(){
   driveLeftBack.tare_position();
-  //driveLeftFront.tare_position();
+  driveLeftFront.tare_position();
   driveRightBack.tare_position();
-  //driveRightFront.tare_position();
+  driveRightFront.tare_position();
 }
 
 void resetQuadEncoders(){
@@ -44,6 +44,20 @@ double avgDriveEncoderValue(){
   return (lb+rb)/2;
 
 }
+
+int get_quad(double angle){
+  int ret = 1;
+  if((angle>270) && (angle <=360)){
+    ret = 4;
+  }else if((angle>180) && (angle <=270)){
+    ret = 3;
+  }else if((angle>90) && (angle <=180)){
+    ret = 2;
+  }
+  printf("In get_quad %d\n",ret);
+  return ret;
+}
+
 //DRIVER CONTROL FUNCTIONS
 void driverControl(){
   int leftJoystick = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -60,19 +74,6 @@ void constantDrive(){
 }
 
 //AUTONOMOUS FUNCTIONS
-int get_quad(double angle){
-  int ret = 1;
-  if((angle>270) && (angle <=360)){
-    ret = 4;
-  }else if((angle>180) && (angle <=270)){
-    ret = 3;
-  }else if((angle>90) && (angle <=180)){
-    ret = 2;
-  }
-  printf("In get_quad %d\n",ret);
-  return ret;
-}
-
 void translate(int units, int voltage){
   printf("In translate %d %d\n",units, voltage);
   int direction = abs(units)/units;
@@ -154,12 +155,6 @@ void initializeIMU(){
   printf("IMU is done calibrating (took %d ms)\n", iter - time);
   pros::delay(2500);
 }
-
-/*void printheading(){
-  InertialA.reset();
-  pros::delay(2500);
-  printf("Heading %f\n", InertialA.get_heading());
-}*/
 
 void rotate(int degrees, int voltage){
   //define out direction , based on the units provided

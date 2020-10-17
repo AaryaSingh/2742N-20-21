@@ -7,6 +7,7 @@ void resetQuadEncoders();
 double avgDriveEncoderValue();
 float avgQuadEncoderValue();
 void initializeIMU();
+int get_quad(double angle);
 //void printheading();
 
 //Driver CONTROL FUNCTION

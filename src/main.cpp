@@ -28,9 +28,9 @@ void initialize() {
 	//pros::lcd::register_btn1_cb(on_center_button);
 
   driveLeftBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  //driveLeftFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  driveLeftFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   driveRightBack.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  //driveRightFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  driveRightFront.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	launcher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	indexer.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	intakeLeft.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -133,18 +133,18 @@ void opcontrol() {
 void opcontrol(){
 	printf("In opcontrol\n");
 	//printheading();
-	translate2(28, 80, false);
-	rotate(-225, 60);
-	translate2(24, 80, true);
+	translate2(22, 80, false);
+	rotate(135, 60);
+	translate2(26, 80, true);
 	pros::delay(1000);
-	translate2(-24, 80, false);
-	rotate(-90, 60);
-	translate2(34, 80, true);
-	rotate(180, 60);
-
+	translate2(-26, 80, false);
+	rotate(-1, 60);
+	translate2(54, 80, true);
+	rotate(-270, 60);
+	translate2(26, 80, true);
 	while(true){
 		//some code to control thr drive
-		//driverControl();
+		driverControl();
 		//constantDrive();
 		//control intake
 		//setIntakeMotors();
