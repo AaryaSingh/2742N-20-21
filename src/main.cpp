@@ -86,16 +86,56 @@ void competition_initialize() {}
 
  }
  void redRightCorner(){
+	 //printheading();
+		/*intakeLeft.move_voltage(-10000);
+		intakeRight.move_voltage(-10000);
+	 pros::delay(1000);
+	 intakeLeft.move_voltage(0);
+		intakeRight.move_voltage(0);
+		pros::delay(1000);*/
+	 intakeLeft.move_voltage(10000);
+	 intakeRight.move_voltage(10000);
+	 //pros::delay(1000);
+	 translate2(22, 80, false);
+	 intakeLeft.move_voltage(0);
+	 intakeRight.move_voltage(0);
+	 rotate(135, 60);
+	 indexer.move_voltage(5000);
+	 translate2(26, 80, true);
+	 indexer.move_voltage(10000);
+	 launcher.move_voltage(10000);
+	 pros::delay(1000);
+	 indexer.move_voltage(0);
+	 launcher.move_voltage(0);
+	 translate2(-26, 80, false);
+	 rotate(-1, 60);
+	 translate2(30, 80, false);
+	 rotate(-270, 60);
+	 indexer.move_voltage(10000);
+	 intakeLeft.move_voltage(10000);
+	 intakeRight.move_voltage(10000);
+	 translate2(26, 80, false);
+	 indexer.move_voltage(0);
+	 intakeLeft.move_voltage(-10000);
+	 intakeRight.move_voltage(-10000);
+	 pros::delay(3000);
+	 intakeLeft.move_voltage(0);
+	 intakeRight.move_voltage(0);
+	 indexer.move_voltage(10000);
+	 launcher.move_voltage(10000);
+	 pros::delay(1500);
+	 indexer.move_voltage(0);
+	 launcher.move_voltage(0);
 
  }
- void blueRighttCorner(){
+ void blueRightCorner(){
 
  }
 void autonomous() {
-	redLeftCorner();
+//	redLeftCorner();
 	redRightCorner();
-	blueLeftCorner();
-	blueRighttCorner();
+//	blueLeftCorner();
+//	blueRightCorner();
 
 }
 
@@ -132,16 +172,7 @@ void opcontrol() {
 
 void opcontrol(){
 	printf("In opcontrol\n");
-	//printheading();
-	translate2(22, 80, false);
-	rotate(135, 60);
-	translate2(26, 80, true);
-	pros::delay(1000);
-	translate2(-26, 80, false);
-	rotate(-1, 60);
-	translate2(54, 80, true);
-	rotate(-270, 60);
-	translate2(26, 80, true);
+
 	while(true){
 		//some code to control thr drive
 		driverControl();
