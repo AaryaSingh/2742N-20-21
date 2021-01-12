@@ -76,10 +76,8 @@ void opcontrol(void);
  * You can add C++-only headers here
  */
  #include "subsystemHeaders/drive.hpp"
- #include "subsystemHeaders/indexer.hpp"
  #include "subsystemHeaders/globals.hpp"
- #include "subsystemHeaders/intake.hpp"
- #include "subsystemHeaders/launcher.hpp"
+ #include "subsystemHeaders/cycler.hpp"
 
 //#include <iostream>
 #endif

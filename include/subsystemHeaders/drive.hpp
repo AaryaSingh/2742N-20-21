@@ -1,7 +1,8 @@
 #include  "main.h"
 
 //HELPER FUNCTIONS
-void setDrive();
+void setDrive(int left, int right);
+void setStrafe(int voltage);
 void resetDriveEncoders();
 void resetQuadEncoders();
 double avgDriveEncoderValue();
@@ -11,10 +12,11 @@ int get_quad(double angle);
 //void printheading();
 
 //Driver CONTROL FUNCTION
-void driverControl();
+void driveControl();
 void constantDrive();
 
 //AUTONOMOUS FUNCTIONS
 void translate(int units, int voltage);
 void translate2(int units, int voltage, bool correction);
+void stranslate(int units, int voltage, bool correction);
 void rotate(int degrees, int voltage);

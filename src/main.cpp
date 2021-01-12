@@ -86,36 +86,103 @@ void competition_initialize() {}
 
  }
  void redRightCorner(){
-	 //printheading();
-		/*intakeLeft.move_voltage(-10000);
-		intakeRight.move_voltage(-10000);
-	 pros::delay(1000);
-	 intakeLeft.move_voltage(0);
-		intakeRight.move_voltage(0);
-		pros::delay(1000);*/
+	 //flipout
+	 launcher.move_voltage(10000);
+
+	 //start; drive forward
 	 intakeLeft.move_voltage(10000);
 	 intakeRight.move_voltage(10000);
-	 //pros::delay(1000);
-	 translate2(22, 80, false);
+	 pros::delay(100);
+	 launcher.move_voltage(0);
+	 translate2(27, 80, false);
+
+	 //turn right; heading 135
 	 intakeLeft.move_voltage(0);
 	 intakeRight.move_voltage(0);
 	 rotate(135, 60);
+
+	 //move to goal
 	 indexer.move_voltage(5000);
-	 translate2(26, 80, true);
-	 indexer.move_voltage(10000);
-	 launcher.move_voltage(10000);
-	 pros::delay(1000);
+	 pros::delay(500);
 	 indexer.move_voltage(0);
-	 launcher.move_voltage(0);
-	 translate2(-26, 80, false);
-	 rotate(-1, 60);
-	 translate2(30, 80, false);
-	 rotate(-270, 60);
-	 indexer.move_voltage(10000);
 	 intakeLeft.move_voltage(10000);
 	 intakeRight.move_voltage(10000);
-	 translate2(26, 80, false);
+	 translate2(30, 80, true);
+
+	 //shoot
+	 launcher.move_voltage(10000);
+	 indexer.move_voltage(10000);
+	 pros::delay(250);
+   indexer.move_voltage(0);
+	 pros::delay(250);
+	 intakeLeft.move_voltage(0);
+	 intakeRight.move_voltage(0);
+	 pros::delay(500);
+	 launcher.move_voltage(0);
+	 launcher.move_voltage(-10000);
+	 pros::delay(250);
+	 launcher.move_voltage(0);
+
+	 //go back
+	 translate2(-28, 80, false);
+	 intakeLeft.move_voltage(-10000);
+	 intakeRight.move_voltage(-10000);
+	 pros::delay(750);
+	 intakeLeft.move_voltage(0);
+	 intakeRight.move_voltage(0);
+
+	 //turn
+	 rotate(-1, 60);
+	 translate2(29, 50, false);
+
+	 //turn to mid
+	 rotate(-270, 80);
+	 intakeLeft.move_voltage(10000);
+	 intakeRight.move_voltage(10000);
+	 indexer.move_voltage(10000);
+	 translate2(26, 60, false);
+	 pros::delay(1000);
 	 indexer.move_voltage(0);
+	 intakeLeft.move_voltage(0);
+   intakeRight.move_voltage(0);
+	 translate2(-5, 80, false);
+	 translate2(6, 80, false);
+	 rotate(290, 60);
+	 indexer.move_voltage(10000);
+	 launcher.move_voltage(10000);
+	 pros::delay(250);
+	 indexer.move_voltage(0);
+	 pros::delay(250);
+	 launcher.move_voltage(0);
+
+	 translate2(-10, 80, false);
+	 rotate(1, 60);
+	 translate2(24, 50, false);
+	 rotate(-300, 60);
+	 intakeLeft.move_voltage(10000);
+	 intakeRight.move_voltage(10000);
+	 indexer.move_voltage(5000);
+	 translate2(92, 80, false);
+	 launcher.move_voltage(10000);
+	 pros::delay(750);
+	 indexer.move_voltage(0);
+	 pros::delay(250);
+	 launcher.move_voltage(0);
+
+	 intakeLeft.move_voltage(0);
+	 intakeRight.move_voltage(0);
+    translate2(-10, 80, false);
+	 /*intakeLeft.move_voltage(10000);
+   intakeRight.move_voltage(10000);
+	 translate2(110, 80, false);
+	 indexer.move_voltage(10000);
+	 launcher.move_voltage(10000);
+	 pros::delay(2000);
+	 intakeLeft.move_voltage(0);
+   intakeRight.move_voltage(0);
+	 indexer.move_voltage(0);
+	 launcher.move_voltage(0);*/
+	 /*indexer.move_voltage(0);
 	 intakeLeft.move_voltage(-10000);
 	 intakeRight.move_voltage(-10000);
 	 pros::delay(3000);
@@ -125,17 +192,42 @@ void competition_initialize() {}
 	 launcher.move_voltage(10000);
 	 pros::delay(1500);
 	 indexer.move_voltage(0);
-	 launcher.move_voltage(0);
+	 launcher.move_voltage(0);*/
 
  }
  void blueRightCorner(){
+	//strafe out and rotate to goal; start intakes
+  stranslate(-20, 100, true);
+  rotate(45, 60);
+	intakeLeft.move_voltage(10000);
+	intakeRight.move_voltage(10000);
+
+	//move to goal
+	translate2(20, 80, false);
+	intakeLeft.move_voltage(0);
+	intakeRight.move_voltage(0);
+
+	//shoot
+	launcher.move_voltage(10000);
+	indexer.move_voltage(10000);
+	pros::delay(250);
+	indexer.move_voltage(0);
+	pros::delay(250);
+	intakeLeft.move_voltage(0);
+	intakeRight.move_voltage(0);
+	pros::delay(500);
+	launcher.move_voltage(0);
+	launcher.move_voltage(-10000);
+	pros::delay(500);
+	launcher.move_voltage(0);
+
 
  }
 void autonomous() {
 //	redLeftCorner();
-	redRightCorner();
+//	redRightCorner();
 //	blueLeftCorner();
-//	blueRightCorner();
+	blueRightCorner();
 
 }
 
@@ -174,16 +266,23 @@ void opcontrol(){
 	printf("In opcontrol\n");
 
 	while(true){
-		//some code to control thr drive
-		driverControl();
-		//constantDrive();
-		//control intake
-		//setIntakeMotors();
-		//Control lift
-		//setLiftMotors();
-		//Control angle
-		//setAnglerMotor();
 
-		pros::delay(20);
+		//some code to control the drive
+		driveControl();
+
+		//control intakes
+		setIntakeMotors();
+
+		//shoot (spins indexer and launcher)
+		shoot();
+
+		//outtakes and reverses intakes
+		cycleOut();
+
+ 		//reverses launcher
+		reverseLauncher();
+
+		pros::delay(10);
+
 	}
 }

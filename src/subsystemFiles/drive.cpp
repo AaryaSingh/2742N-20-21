@@ -1,8 +1,8 @@
 #include  "main.h"
 
 pros::Imu InertialA(4);
-pros::ADIEncoder encRight('E', 'F', false);
-pros::ADIEncoder encLeft('G', 'H', false);
+pros::ADIEncoder encForward('E', 'F', false);
+pros::ADIEncoder encStrafe('G', 'H', false);
 
 //HELPER FUNCTIONS
 void setDrive(int left, int right){
@@ -10,6 +10,13 @@ void setDrive(int left, int right){
   driveLeftFront = left;
   driveRightBack = right;
   driveRightFront = right;
+}
+
+void setStrafe(int voltage){
+  driveLeftBack = -voltage;
+  driveLeftFront = voltage;
+  driveRightBack = voltage;
+  driveRightFront = -voltage;
 }
 
 void resetDriveEncoders(){
@@ -21,17 +28,17 @@ void resetDriveEncoders(){
 
 void resetQuadEncoders(){
   printf("Enter resetQuadEncoders\n");
-  encRight.reset();
+  encForward.reset();
   pros::delay(100);
-  encLeft.reset();
+  encStrafe.reset();
   printf("Exit resetQuadEncoders\n");
 }
 
 float avgQuadEncoderValue(){
-  int rightVal = encRight.get_value();
-  int leftVal = encLeft.get_value();
+  int rightVal = encForward.get_value();
+  int leftVal = encStrafe.get_value();
   printf("rb:%d lb:%d\n", rightVal, leftVal);
-  float avg = (encLeft.get_value() + encRight.get_value())/2;
+  float avg = (encStrafe.get_value() + encForward.get_value())/2;
   return avg;
 }
 
@@ -59,12 +66,16 @@ int get_quad(double angle){
 }
 
 //DRIVER CONTROL FUNCTIONS
-void driverControl(){
+void driveControl(){
   int leftJoystick = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
   int rightJoystick = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
   if(abs(leftJoystick) < 10){leftJoystick = 0;}
   if(abs(rightJoystick) < 10){rightJoystick = 0;}
   setDrive(leftJoystick, rightJoystick);
+
+  int strafeVoltage = 127*(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)-controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT));
+  setStrafe(strafeVoltage);
+
 }
 
 void constantDrive(){
@@ -102,13 +113,13 @@ void translate2(int units, int voltage, bool correction){
   resetQuadEncoders();
   printf("reset encoders\n");
   //drive forward until units are reached
-  float tickDistInch = avgQuadEncoderValue()*(9.3/360);
+  float tickDistInch = encForward.get_value()*(9.3/360);
   printf("set tickdistinch\n");
   while(fabs(tickDistInch) < abs(units)){
     printf("avg val %f\n", tickDistInch);
     setDrive(voltage*direction, voltage*direction);
     pros::delay(10);
-    tickDistInch = avgQuadEncoderValue()*(9.3/360);
+    tickDistInch = encForward.get_value()*(9.3/360);
   }
   printf("exit while\n");
   //brief set_brake_mode
@@ -140,6 +151,53 @@ void translate2(int units, int voltage, bool correction){
     setDrive(0,0);
   }
 }
+
+void stranslate(int units, int voltage, bool correction){
+  double initHeading = InertialA.get_heading();
+  printf("In stranslate %d %d\n",units, voltage);
+  int direction = abs(units)/units;
+  resetQuadEncoders();
+  printf("reset encoders\n");
+  //drive forward until units are reached
+  float tickDistInch = encStrafe.get_value()*(9.3/360);
+  printf("set tickdistinch\n");
+  while(fabs(tickDistInch) < abs(units)){
+    printf("avg val %f\n", tickDistInch);
+    setStrafe(voltage*direction);
+    pros::delay(10);
+    tickDistInch = encStrafe.get_value()*(9.3/360);
+  }
+
+  printf("exit while\n");
+  //brief set_brake_mode
+  setStrafe(-10 * direction);
+  pros::delay(50);
+  //set drive back to neutral
+  setDrive(0,0);
+  if(correction){
+    double newHeading = InertialA.get_heading();
+    int init_quad = get_quad(initHeading);
+    int final_quad = get_quad(newHeading);
+
+    if(init_quad==1 && final_quad==4){
+      direction = 1; //clockwise;
+    }else if(init_quad==4 && final_quad==1){
+      direction = -1; //counter;
+    }else{
+      direction = (initHeading - newHeading)/fabs(initHeading - newHeading);
+    }
+    printf("Correction direction %d\n",direction);
+
+    double botAngle = InertialA.get_heading();
+    while((botAngle<initHeading-1) || (botAngle>initHeading+1)){
+      setDrive(30*direction, -30*direction);
+      botAngle = InertialA.get_heading();
+      pros::delay(10);
+    }
+    setDrive(0,0);
+  }
+}
+
 
 void initializeIMU(){
   InertialA.reset();
