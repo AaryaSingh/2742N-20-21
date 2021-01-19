@@ -73,16 +73,17 @@ void driveControl(){
   if(abs(rightJoystick) < 10){rightJoystick = 0;}
   setDrive(leftJoystick, rightJoystick);
 
-  int strafeVoltage = 127*(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)-controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT));
-  setStrafe(strafeVoltage);
+  if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)||controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)){
+    int strafeVoltage = 127*(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)-controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT));
+    setStrafe(strafeVoltage);
+  }
 
 }
 
-void constantDrive(){
-  int voltage = 80;
-  int val = (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)-controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))*voltage;
-  setDrive(val, val);
-}
+// void strafeControl(){
+//   int strafeVoltage = 127*(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)-controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT));
+//   setStrafe(strafeVoltage);
+// }
 
 //AUTONOMOUS FUNCTIONS
 void translate(int units, int voltage){
@@ -92,6 +93,7 @@ void translate(int units, int voltage){
   resetDriveEncoders();
   printf("reset encoders\n");
   //drive forward until units are reached
+
   float tickDistInch = avgDriveEncoderValue()*(12.57/900);
   while(tickDistInch < abs(units)){
     setDrive(voltage*direction, voltage*direction);

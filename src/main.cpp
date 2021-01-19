@@ -57,7 +57,14 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+	//initializeIMU();
+	InertialA.reset();
+	while(InertialA.is_calibrating()){
+		pros::delay(20);
+	}
+	pros::delay(20);
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -71,18 +78,29 @@ void competition_initialize() {}
  * from where it left off.
  */
  void redLeftCorner(){
-	 //Go to first corner- Can we make function of these steps?
-	 //Step-1 : go straight to white line.
-	 //step-2 : Turn 135 degrees
-	 //step-3 : grab the red ball and shoot that in
-	 //Step-4 : remove red ball and shoot it back
-	 //step-5 : remove blue ball and discard
-   translate(24, 100);
-	 rotate(135, 11);
-	 //setIntakeMotors(127);
+
  }
 
  void blueLeftCorner(){
+	//strafe and move to goal
+	launcher.move_voltage(-10000);
+ 	stranslate(-11, 80, false);
+	launcher.move_voltage(0);
+	rotate(45, 60);
+	intakeLeft.move_voltage(5000);
+	intakeRight.move_voltage(5000);
+	translate2(10, 80, true);
+	intakeLeft.move_voltage(0);
+	intakeRight.move_voltage(0);
+	//shoot
+	launcher.move_voltage(10000);
+	indexer.move_voltage(10000);
+	pros::delay(250);
+	indexer.move_voltage(0);
+	launcher.move_voltage(0);
+
+  //move back
+	translate2(-18, 80, true);
 
  }
  void redRightCorner(){
@@ -195,17 +213,29 @@ void competition_initialize() {}
 	 launcher.move_voltage(0);*/
 
  }
- void blueRightCorner(){
+ void matchAuton(){
 	//strafe out and rotate to goal; start intakes
+	launcher.move_voltage(-10000);
   stranslate(-20, 100, true);
-  rotate(45, 60);
+	launcher.move_voltage(0);
+  rotate(45, 80);
 	intakeLeft.move_voltage(10000);
 	intakeRight.move_voltage(10000);
 
 	//move to goal
-	translate2(20, 80, false);
+	translate2(22, 100, false);
+	pros::delay(500);
 	intakeLeft.move_voltage(0);
 	intakeRight.move_voltage(0);
+
+	// stranslate(-2, 100, true);
+	// intakeLeft.move_voltage(10000);
+  // intakeRight.move_voltage(10000);
+  // translate2(14, 100, false);
+	// rotate(45, 80);
+	// translate2(2, 100, false);
+	// intakeLeft.move_voltage(0);
+	// intakeRight.move_voltage(0);
 
 	//shoot
 	launcher.move_voltage(10000);
@@ -217,7 +247,31 @@ void competition_initialize() {}
 	intakeRight.move_voltage(0);
 	pros::delay(500);
 	launcher.move_voltage(0);
-	launcher.move_voltage(-10000);
+
+	//move out
+	intakeLeft.move_voltage(-10000);
+	intakeRight.move_voltage(-10000);
+	pros::delay(250);
+	translate2(-11, 100, true);
+	pros::delay(250);
+	intakeLeft.move_voltage(0);
+	intakeRight.move_voltage(0);
+
+	//turn and strafe to middle home row
+	rotate(90, 80);
+  stranslate(44, 110, true);
+
+	//move to goal
+  translate2(5, 127, false);
+
+	//shoot
+	launcher.move_voltage(10000);
+	indexer.move_voltage(10000);
+	pros::delay(250);
+	indexer.move_voltage(0);
+	pros::delay(250);
+	intakeLeft.move_voltage(0);
+	intakeRight.move_voltage(0);
 	pros::delay(500);
 	launcher.move_voltage(0);
 
@@ -226,8 +280,8 @@ void competition_initialize() {}
 void autonomous() {
 //	redLeftCorner();
 //	redRightCorner();
-//	blueLeftCorner();
-	blueRightCorner();
+	blueLeftCorner();
+//	matchAuton();
 
 }
 
@@ -274,13 +328,13 @@ void opcontrol(){
 		setIntakeMotors();
 
 		//shoot (spins indexer and launcher)
-		shoot();
+		//shoot();
 
 		//outtakes and reverses intakes
-		cycleOut();
-
- 		//reverses launcher
-		reverseLauncher();
+		//cycleOut();
+		//
+ 		// //reverses launcher
+		// reverseLauncher();
 
 		pros::delay(10);
 

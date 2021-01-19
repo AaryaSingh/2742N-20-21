@@ -18,5 +18,5 @@ extern pros::Controller controller;
 //when your gyro turns left it gives
 //positive value and when it turns right it give negative value
 extern pros::Imu InertialA;
-extern pros::ADIEncoder encRight;
-extern pros::ADIEncoder encLeft;
+extern pros::ADIEncoder encForward;
+extern pros::ADIEncoder encStrafe;
