@@ -126,7 +126,7 @@ void translate2(int units, int voltage, bool correction){
   printf("exit while\n");
   //brief set_brake_mode
   setDrive(-10 * direction, -10 * direction);
-  pros::delay(50);
+  pros::delay(100);
   //set drive back to neutral
   setDrive(0,0);
 
@@ -200,7 +200,6 @@ void stranslate(int units, int voltage, bool correction){
   }
 }
 
-
 void initializeIMU(){
   InertialA.reset();
 
@@ -260,12 +259,51 @@ void rotate(int degrees, int voltage){
   }
 
   double correctAngle = InertialA.get_heading();
-  while((correctAngle<abs(degrees)-1) || (correctAngle>abs(degrees)+1)){
-     setDrive(30*direction, -30*direction);
+  while((correctAngle<abs(degrees)-2) || (correctAngle>abs(degrees)+2)){
+     setDrive(25*direction, -25*direction);
      pros::delay(10);
      correctAngle = InertialA.get_heading();
    }
 
   //reset drive to zero
+  setDrive(0,0);
+}
+
+void ctranslate(double units, int voltage, int heading){
+  int direction = fabs(units)/units;
+  //reset encoders
+  resetQuadEncoders();
+  //drive forward until units are reached
+  float tickDistInch = encForward.get_value()*(9.3/360);
+  while(fabs(tickDistInch) < fabs(units)){
+    double currentHeading = InertialA.get_heading();
+    printf("in while %f\n",currentHeading);
+    int init_quad = get_quad(heading);
+    int final_quad = get_quad(currentHeading);
+
+    //correction while drive
+    while((fabs(heading-currentHeading) > 1) && (fabs(tickDistInch) < fabs(units))){
+      printf("in if %f\n",currentHeading);
+      currentHeading = InertialA.get_heading();
+      int cDirection;
+      if(init_quad==1 && final_quad==4){
+        cDirection = 1; //clockwise;
+      }else if(init_quad==4 && final_quad==1){
+        cDirection = -1; //counter;
+      }else{
+        cDirection = (heading - currentHeading)/fabs(heading - currentHeading);
+      }
+        setDrive(voltage*direction + cDirection*10, voltage*direction - cDirection*10);
+        tickDistInch = encForward.get_value()*(9.3/360);
+      }
+      printf("in else %d\n",direction);
+      setDrive(voltage*direction, voltage*direction);
+      pros::delay(10);
+      tickDistInch = encForward.get_value()*(9.3/360);
+  }
+  //brief set_brake_mode
+  setDrive(-10 * direction, -10 * direction);
+  pros::delay(100);
+  //set drive back to neutral
   setDrive(0,0);
 }

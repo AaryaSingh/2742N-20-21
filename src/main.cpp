@@ -78,13 +78,14 @@ void competition_initialize() {
  * from where it left off.
  */
  void redLeftCorner(){
-
+	rotate(90, 60);
+ 	ctranslate(48, 60, 90);
  }
 
- void blueLeftCorner(){
+ void skillsAuton(){
 	//strafe and move to goal
 	launcher.move_voltage(-10000);
- 	stranslate(-11, 80, false);
+ 	stranslate(-12, 80, false);
 	launcher.move_voltage(0);
 	rotate(45, 60);
 	intakeLeft.move_voltage(5000);
@@ -95,12 +96,69 @@ void competition_initialize() {
 	//shoot
 	launcher.move_voltage(10000);
 	indexer.move_voltage(10000);
-	pros::delay(250);
+	pros::delay(500);
 	indexer.move_voltage(0);
 	launcher.move_voltage(0);
 
-  //move back
-	translate2(-18, 80, true);
+  //move back and turn
+	translate2(-12, 80, false);
+	rotate(-270, 40);
+
+	//straight and intake
+	intakeLeft.move_voltage(10000);
+	intakeRight.move_voltage(10000);
+	translate2(45, 80, false);
+	rotate(359, 60);
+	indexer.move_voltage(10000);
+	intakeLeft.move_voltage(0);
+	intakeRight.move_voltage(0);
+  translate2(8, 80, false);
+
+	//shoot
+	launcher.move_voltage(10000);
+	pros::delay(500);
+	indexer.move_voltage(0);
+	launcher.move_voltage(0);
+
+	translate2(-8, 80, false);
+	rotate(180, 60);
+	intakeLeft.move_voltage(10000);
+	intakeRight.move_voltage(10000);
+	translate2(22, 80, false);
+ 	stranslate(-3, 80, false);
+	intakeLeft.move_voltage(0);
+	intakeRight.move_voltage(0);
+	translate2(16, 80, false);
+
+	indexer.move_voltage(10000);
+	rotate(200, 60);
+	launcher.move_voltage(7500);
+	pros::delay(500);
+	indexer.move_voltage(0);
+	launcher.move_voltage(0);
+
+
+	translate2(-8, 80, false);
+	rotate(290, 60);
+
+	intakeLeft.move_voltage(10000);
+	intakeRight.move_voltage(10000);
+	translate2(60, 80, false);
+
+	indexer.move_voltage(5000);
+	intakeLeft.move_voltage(5000);
+	intakeRight.move_voltage(5000);
+	rotate(325, 60);
+	intakeLeft.move_voltage(0);
+	intakeRight.move_voltage(0);
+  translate2(20, 80, false);
+
+  //shoot
+	indexer.move_voltage(10000);
+	launcher.move_voltage(7500);
+	pros::delay(500);
+	indexer.move_voltage(0);
+	launcher.move_voltage(0);
 
  }
  void redRightCorner(){
@@ -280,7 +338,7 @@ void competition_initialize() {
 void autonomous() {
 //	redLeftCorner();
 //	redRightCorner();
-	blueLeftCorner();
+	skillsAuton();
 //	matchAuton();
 
 }
