@@ -16,7 +16,7 @@ void driveControl();
 // void strafeControl();
 
 //AUTONOMOUS FUNCTIONS
-void ctranslate(double units, int voltage, int heading);
+void ctranslate(double units, int voltage, int heading, int cf);
 void translate2(int units, int voltage, bool correction);
 void stranslate(int units, int voltage, bool correction);
 void rotate(int degrees, int voltage);

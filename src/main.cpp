@@ -35,10 +35,6 @@ void initialize() {
 	indexer.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	intakeLeft.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	intakeRight.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-
-  //initializeIMU();
-	InertialA.reset();
-	pros::delay(3000);
 }
 
 /**
@@ -79,87 +75,149 @@ void competition_initialize() {
  */
  void redLeftCorner(){
 	rotate(90, 60);
- 	ctranslate(48, 60, 90);
+ 	//ctranslate(48, 60, 90);
  }
 
  void skillsAuton(){
-	//strafe and move to goal
-	launcher.move_voltage(-10000);
- 	stranslate(-12, 80, false);
-	launcher.move_voltage(0);
-	rotate(45, 60);
-	intakeLeft.move_voltage(5000);
-	intakeRight.move_voltage(5000);
-	translate2(10, 80, true);
-	intakeLeft.move_voltage(0);
-	intakeRight.move_voltage(0);
-	//shoot
-	launcher.move_voltage(10000);
+	launcher.move_voltage(-12000);
+  rotate(-330, 60);
+ 	launcher.move_voltage(0);
+
+ 	setIntake(127);
 	indexer.move_voltage(10000);
-	pros::delay(500);
+ 	translate2(22, 120, false);
+	rotate(23, 60);
 	indexer.move_voltage(0);
-	launcher.move_voltage(0);
+  translate2(24, 120, false);
+ 	pros::delay(500);
+ 	setIntake(0);
+
+ 	shoot(100);
+ 	pros::delay(500);
+ 	shoot(0);
 
   //move back and turn
-	translate2(-12, 80, false);
-	rotate(-270, 40);
+	setIntake(-100);
+	translate2(-10, 80, false);
+	setIntake(0);
+	shoot(100);
+	pros::delay(500);
+	rotate(-270, 60);
+	shoot(0);
 
 	//straight and intake
-	intakeLeft.move_voltage(10000);
-	intakeRight.move_voltage(10000);
-	translate2(45, 80, false);
+	setIntake(100);
+  indexer.move_voltage(10000);
+	translate2(47, 80, false);
 	rotate(359, 60);
-	indexer.move_voltage(10000);
-	intakeLeft.move_voltage(0);
-	intakeRight.move_voltage(0);
-  translate2(8, 80, false);
+	indexer.move_voltage(0);
+	setIntake(0);
+  translate2(5, 80, true);
 
 	//shoot
-	launcher.move_voltage(10000);
-	pros::delay(500);
-	indexer.move_voltage(0);
-	launcher.move_voltage(0);
+	shoot(110);
+	pros::delay(750);
+	shoot(0);
 
+  //back out and turn
 	translate2(-8, 80, false);
 	rotate(180, 60);
-	intakeLeft.move_voltage(10000);
-	intakeRight.move_voltage(10000);
-	translate2(22, 80, false);
- 	stranslate(-3, 80, false);
-	intakeLeft.move_voltage(0);
-	intakeRight.move_voltage(0);
-	translate2(16, 80, false);
+	setIntake(100);
 
+	//go towards mid
+	translate2(18, 80, false);
+ 	stranslate(-2, 70, false);
+	setIntake(0);
+	indexer.move_voltage(10000);
+
+	//descore
+	translate2(9, 127, true);
+	translate2(-5, 80, true);
+	translate2(5, 127, true);
+
+  //angle and shoot in mid
 	indexer.move_voltage(10000);
 	rotate(200, 60);
-	launcher.move_voltage(7500);
-	pros::delay(500);
-	indexer.move_voltage(0);
-	launcher.move_voltage(0);
+	setDrive(100, 100);
+	pros::delay(100);
+	setDrive(0, 0);
+	indexer.move_voltage(-5000);
+	pros::delay(200);
+	shoot(110);
+	pros::delay(600);
+	shoot(0);
 
 
+	//back out and move to ball
 	translate2(-8, 80, false);
-	rotate(290, 60);
-
-	intakeLeft.move_voltage(10000);
-	intakeRight.move_voltage(10000);
+	rotate(287, 60);
+	setIntake(127);
 	translate2(60, 80, false);
 
+	//turn to corner goal
 	indexer.move_voltage(5000);
-	intakeLeft.move_voltage(5000);
-	intakeRight.move_voltage(5000);
-	rotate(325, 60);
-	intakeLeft.move_voltage(0);
-	intakeRight.move_voltage(0);
-  translate2(20, 80, false);
+	setIntake(100);
+	rotate(330, 60);
+  translate2(21, 120, false);
 
-  //shoot
+  //shoot into corner
+	shoot(100);
+	pros::delay(750);
+	setIntake(0);
+	shoot(0);
+
+	//back out
+	setIntake(-100);
+	translate2(-10, 80, false);
+
+	//shoot to release excess ball
+	shoot(100);
+	pros::delay(200);
+	setIntake(100);
+
+	//go to ball
 	indexer.move_voltage(10000);
-	launcher.move_voltage(7500);
-	pros::delay(500);
+	rotate(148, 40);
+	launcher.move_voltage(0);
+	indexer.move_voltage(0);
+	translate2(51, 100, false);
+
+	//turn and move to side
+	rotate(270, 60);
+	pros::delay(250);
+	launcher.move_voltage(0);
+	translate2(30, 120, false);
+
+	//shoot at side goal
+	setIntake(0);
+	indexer.move_voltage(10000);
+	launcher.move_voltage(10000);
+	pros::delay(700);
 	indexer.move_voltage(0);
 	launcher.move_voltage(0);
 
+	//back out and turn
+	translate2(-3, 80, false);
+	setIntake(-100);
+	rotate(-180, 60);
+
+
+	//straight
+	setIntake(100);
+	indexer.move_voltage(10000);
+	translate2(45, 110, false);
+
+
+	//move towards corner goal and shoot
+	rotate(225, 60);
+	indexer.move_voltage(0);
+	setIntake(0);
+	translate2(10, 127, false);
+	indexer.move_voltage(10000);
+	launcher.move_voltage(10000);
+	pros::delay(700);
+	indexer.move_voltage(0);
+	launcher.move_voltage(0);
  }
  void redRightCorner(){
 	 //flipout
@@ -273,18 +331,50 @@ void competition_initialize() {
  }
  void matchAuton(){
 	//strafe out and rotate to goal; start intakes
-	launcher.move_voltage(-10000);
-  stranslate(-20, 100, true);
+	launcher.move_voltage(-12000);
+  rotate(-340, 60);
 	launcher.move_voltage(0);
-  rotate(45, 80);
-	intakeLeft.move_voltage(10000);
-	intakeRight.move_voltage(10000);
 
-	//move to goal
-	translate2(22, 100, false);
+	setIntake(127);
+	ctranslate(20, 120, 0, 30);
+	ctranslate(24, 110, 45, 50);
 	pros::delay(500);
-	intakeLeft.move_voltage(0);
-	intakeRight.move_voltage(0);
+	setIntake(0);
+
+	shoot(100);
+	pros::delay(1000);
+	setIntake(-100);
+	shoot(0);
+
+	translate2(-13, 100, false);
+	setIntake(0);
+	rotate(180, 80);
+	translate2(50, 127, true);
+	ctranslate(40, 100, -135, 20);
+
+	setIntake(100);
+	//rotate(-135, 80);
+	setDrive(100, 100);
+	pros::delay(750);
+	setDrive(0, 0);
+	pros::delay(100);
+	setIntake(0);
+	shoot(100);
+	pros::delay(750);
+	shoot(0);
+
+
+
+	// launcher.move_voltage(0);
+  // rotate(45, 80);
+	// intakeLeft.move_voltage(10000);
+	// intakeRight.move_voltage(10000);
+	//
+	// //move to goal
+	// translate2(22, 100, false);
+	// pros::delay(500);
+	// intakeLeft.move_voltage(0);
+	// intakeRight.move_voltage(0);
 
 	// stranslate(-2, 100, true);
 	// intakeLeft.move_voltage(10000);
@@ -295,51 +385,51 @@ void competition_initialize() {
 	// intakeLeft.move_voltage(0);
 	// intakeRight.move_voltage(0);
 
-	//shoot
-	launcher.move_voltage(10000);
-	indexer.move_voltage(10000);
-	pros::delay(250);
-	indexer.move_voltage(0);
-	pros::delay(250);
-	intakeLeft.move_voltage(0);
-	intakeRight.move_voltage(0);
-	pros::delay(500);
-	launcher.move_voltage(0);
-
-	//move out
-	intakeLeft.move_voltage(-10000);
-	intakeRight.move_voltage(-10000);
-	pros::delay(250);
-	translate2(-11, 100, true);
-	pros::delay(250);
-	intakeLeft.move_voltage(0);
-	intakeRight.move_voltage(0);
-
-	//turn and strafe to middle home row
-	rotate(90, 80);
-  stranslate(44, 110, true);
-
-	//move to goal
-  translate2(5, 127, false);
-
-	//shoot
-	launcher.move_voltage(10000);
-	indexer.move_voltage(10000);
-	pros::delay(250);
-	indexer.move_voltage(0);
-	pros::delay(250);
-	intakeLeft.move_voltage(0);
-	intakeRight.move_voltage(0);
-	pros::delay(500);
-	launcher.move_voltage(0);
+	// //shoot
+	// launcher.move_voltage(10000);
+	// indexer.move_voltage(10000);
+	// pros::delay(250);
+	// indexer.move_voltage(0);
+	// pros::delay(250);
+	// intakeLeft.move_voltage(0);
+	// intakeRight.move_voltage(0);
+	// pros::delay(500);
+	// launcher.move_voltage(0);
+	//
+	// //move out
+	// intakeLeft.move_voltage(-10000);
+	// intakeRight.move_voltage(-10000);
+	// pros::delay(250);
+	// translate2(-11, 100, true);
+	// pros::delay(250);
+	// intakeLeft.move_voltage(0);
+	// intakeRight.move_voltage(0);
+	//
+	// //turn and strafe to middle home row
+	// rotate(90, 80);
+  // stranslate(44, 110, true);
+	//
+	// //move to goal
+  // translate2(5, 127, false);
+	//
+	// //shoot
+	// launcher.move_voltage(10000);
+	// indexer.move_voltage(10000);
+	// pros::delay(250);
+	// indexer.move_voltage(0);
+	// pros::delay(250);
+	// intakeLeft.move_voltage(0);
+	// intakeRight.move_voltage(0);
+	// pros::delay(500);
+	// launcher.move_voltage(0);
 
 
  }
 void autonomous() {
 //	redLeftCorner();
 //	redRightCorner();
-	skillsAuton();
-//	matchAuton();
+//	skillsAuton();
+	matchAuton();
 
 }
 

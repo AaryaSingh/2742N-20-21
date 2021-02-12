@@ -122,6 +122,8 @@ void translate2(int units, int voltage, bool correction){
     setDrive(voltage*direction, voltage*direction);
     pros::delay(10);
     tickDistInch = encForward.get_value()*(9.3/360);
+
+    if(true){}
   }
   printf("exit while\n");
   //brief set_brake_mode
@@ -269,8 +271,9 @@ void rotate(int degrees, int voltage){
   setDrive(0,0);
 }
 
-void ctranslate(double units, int voltage, int heading){
+void ctranslate(double units, int voltage, int heading, int cf){
   int direction = fabs(units)/units;
+  double checker = 0.0;
   //reset encoders
   resetQuadEncoders();
   //drive forward until units are reached
@@ -279,10 +282,13 @@ void ctranslate(double units, int voltage, int heading){
     double currentHeading = InertialA.get_heading();
     printf("in while %f\n",currentHeading);
     int init_quad = get_quad(heading);
-    int final_quad = get_quad(currentHeading);
 
+    if(fabs(heading-currentHeading)>180){
+      checker = (heading-currentHeading) - (heading-currentHeading)/fabs(heading-currentHeading)*360.0;
+    } else checker = fabs(heading-currentHeading);
     //correction while drive
-    while((fabs(heading-currentHeading) > 1) && (fabs(tickDistInch) < fabs(units))){
+    while((checker > 1) && (fabs(tickDistInch) < fabs(units))){
+      int final_quad = get_quad(currentHeading);
       printf("in if %f\n",currentHeading);
       currentHeading = InertialA.get_heading();
       int cDirection;
@@ -293,7 +299,7 @@ void ctranslate(double units, int voltage, int heading){
       }else{
         cDirection = (heading - currentHeading)/fabs(heading - currentHeading);
       }
-        setDrive(voltage*direction + cDirection*10, voltage*direction - cDirection*10);
+        setDrive(voltage*direction + cDirection*cf, voltage*direction - cDirection*cf);
         tickDistInch = encForward.get_value()*(9.3/360);
       }
       printf("in else %d\n",direction);

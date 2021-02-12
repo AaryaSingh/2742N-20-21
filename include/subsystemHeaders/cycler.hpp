@@ -7,6 +7,6 @@ void setIndexer(int power);
 
 //DRIVER CONTROL FUNCTIONS
 void setIntakeMotors();
-void shoot();
+void shoot(int power);
 void cycleOut();
 void reverseLauncher();
