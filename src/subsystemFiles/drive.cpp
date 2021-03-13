@@ -73,11 +73,16 @@ void driveControl(){
   if(abs(rightJoystick) < 10){rightJoystick = 0;}
   setDrive(leftJoystick, rightJoystick);
 
+}
+
+void arrows(){
   if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)||controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)){
     int strafeVoltage = 127*(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)-controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT));
     setStrafe(strafeVoltage);
+  } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)||controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)){
+    int drivePower = 127*(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)-controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN));
+    setDrive(drivePower, drivePower);
   }
-
 }
 
 // void strafeControl(){
@@ -312,4 +317,65 @@ void ctranslate(double units, int voltage, int heading, int cf){
   pros::delay(100);
   //set drive back to neutral
   setDrive(0,0);
+}
+
+void dtranslate(int units, int voltage, bool correction){
+  double initHeading = InertialA.get_heading();
+  printf("In translate2 %d %d\n",units, voltage);
+  int direction = abs(units)/units;
+  //reset encoders
+  resetQuadEncoders();
+  printf("reset encoders\n");
+  //drive forward until units are reached
+  float tickDistInch = encForward.get_value()*(9.3/360);
+  printf("set tickdistinch\n");
+  while(fabs(tickDistInch) < abs(units)){
+    printf("avg val %f\n", tickDistInch);
+    setDrive(voltage*direction, voltage*direction);
+    pros::delay(10);
+    tickDistInch = encForward.get_value()*(9.3/360);
+
+  }
+  printf("exit while\n");
+  //brief set_brake_mode
+  setDrive(-10 * direction, -10 * direction);
+  pros::delay(50);
+  //set drive back to neutral
+  setDrive(0,0);
+
+  if(abs(units) < fabs(encForward.get_value()*(9.3/360))){
+    while(fabs(encForward.get_value()*(9.3/360)) > abs(units)+1){
+      setDrive(-20 * direction, -20 * direction);
+    }
+  }
+
+  //brief set_brake_mode
+  setDrive(-10 * direction, -10 * direction);
+  pros::delay(50);
+  //set drive back to neutral
+  setDrive(0,0);
+
+  if(correction){
+    double newHeading = InertialA.get_heading();
+    int init_quad = get_quad(initHeading);
+    int final_quad = get_quad(newHeading);
+
+    if(init_quad==1 && final_quad==4){
+      direction = 1; //clockwise;
+    }else if(init_quad==4 && final_quad==1){
+      direction = -1; //counter;
+    }else{
+      direction = (initHeading - newHeading)/fabs(initHeading - newHeading);
+    }
+    printf("Correction direction %d\n",direction);
+
+    double botAngle = InertialA.get_heading();
+    while((botAngle<initHeading-1) || (botAngle>initHeading+1)){
+      setDrive(30*direction, -30*direction);
+      botAngle = InertialA.get_heading();
+      pros::delay(10);
+    }
+    setDrive(0,0);
+  }
+
 }

@@ -67,11 +67,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/subsystemFiles/cycler.cpp.o",
-            "src\\subsystemFiles\\cycler.cpp"
+            "bin/subsystemFiles/drive.cpp.o",
+            "src\\subsystemFiles\\drive.cpp"
         ],
         "directory": "C:\\2742N-20-21",
-        "file": "src\\subsystemFiles\\cycler.cpp"
+        "file": "src\\subsystemFiles\\drive.cpp"
     },
     {
         "arguments": [
@@ -104,11 +104,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/subsystemFiles/drive.cpp.o",
-            "src\\subsystemFiles\\drive.cpp"
+            "bin/subsystemFiles/cycler.cpp.o",
+            "src\\subsystemFiles\\cycler.cpp"
         ],
         "directory": "C:\\2742N-20-21",
-        "file": "src\\subsystemFiles\\drive.cpp"
+        "file": "src\\subsystemFiles\\cycler.cpp"
     },
     {
         "arguments": [

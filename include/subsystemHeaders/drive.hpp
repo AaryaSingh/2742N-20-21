@@ -13,9 +13,11 @@ int get_quad(double angle);
 
 //Driver CONTROL FUNCTION
 void driveControl();
+void arrows();
 // void strafeControl();
 
 //AUTONOMOUS FUNCTIONS
+void dtranslate(int units, int voltage, bool correction);
 void ctranslate(double units, int voltage, int heading, int cf);
 void translate2(int units, int voltage, bool correction);
 void stranslate(int units, int voltage, bool correction);
