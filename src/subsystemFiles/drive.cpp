@@ -238,21 +238,6 @@ void rotate(int degrees, int voltage){
 
   }
   pros::delay(100);
-  //check if it overshot
-/*  botAngle = InertialA.get_heading();
-  if(fabs(botAngle) > abs(degrees)){
-    setDrive(-0.5*voltage*direction, 0.5 * voltage * direction);
-    while(fabs(botAngle) > abs(degrees)){
-      pros::delay(10);
-      botAngle = InertialA.get_heading();
-      printf("while2 %f\n", botAngle);
-    }
-  }else if(fabs(botAngle) < abs(degrees )){
-    setDrive(0.5*-voltage*direction, 0.5 * voltage * direction);
-    while(fabs(gyro.get_value()) > abs(degrees * 10)){
-       pros::delay(10);
-    }
-  }*/
   double newHeading = InertialA.get_heading();
   int init_quad = get_quad(abs(degrees));
   int final_quad = get_quad(newHeading);
@@ -267,7 +252,7 @@ void rotate(int degrees, int voltage){
 
   double correctAngle = InertialA.get_heading();
   while((correctAngle<abs(degrees)-2) || (correctAngle>abs(degrees)+2)){
-     setDrive(25*direction, -25*direction);
+     setDrive(30*direction, -30*direction);
      pros::delay(10);
      correctAngle = InertialA.get_heading();
    }
